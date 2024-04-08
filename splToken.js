@@ -8,6 +8,8 @@ const splToken = require('@solana/spl-token');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
+const nonce = "8nKeK8oeeRiH6n1oqBUR76mQ6muZtScoecPENuxy6njm";
+
 module.exports = {
   isAddress,
   load,
@@ -27,8 +29,11 @@ let wallet = null;
 
 function load(_settings) {
   settings = _settings;
-  connection =
-    new web3.Connection(web3.clusterApiUrl(settings.cluster), 'confirmed');
+  if (settings.rpcUrl == "") {
+    console.error("ERROR: No RPC endpoint set, shutting down.");
+    process.exit();
+  }
+  connection = new web3.Connection(settings.rpcUrl, "confirmed");
   wallet = web3.Keypair.fromSecretKey(
     new Uint8Array(JSON.parse(fs.readFileSync(settings.keypairPath))));
 }
@@ -133,7 +138,7 @@ function getTokenAccount(address) {
 }
 
 async function getNonce() {
-  return (await connection.getNonce(new web3.PublicKey(settings.nonceAccount))).nonce;
+  return (await connection.getNonce(new web3.PublicKey(settings.nonceAccount)).then(result => { return result.nonce }).catch(error => console.error(error)));
 }
 
 async function signMint(destination, amount) {
@@ -172,6 +177,8 @@ async function finalizeMintAndSend(destination, amount, signatures) {
   for (const signature of signatures) {
     cliQuery += ` --signer ${signature}`;
   }
+
+  logToFile(cliQuery)
 
   const {
     stdout

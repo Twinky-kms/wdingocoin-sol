@@ -1,5 +1,6 @@
 {
   "cluster": "mainnet-beta",
+  "rpcUrl": "",
   "tokenAddress": "6VYF5jXq6rfq4QRgGMG6co7b1Ev1Lj7KSbHBxfQ9e1L3",
   "multisigAccount": "EEqkyzc7bdHjSBQa4BekmKyWEMQxBTu8geJJ9ejWcZZV",
   "multisigSigners": [
