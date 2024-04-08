@@ -120,7 +120,6 @@ function parseBool(s) {
     writer: (x) => x,
     ignoreUndefined: true,
   });
-  require("repl.history")(repl, ".cli_history");
 
   const commandCallbacks = {
     help: help,
