@@ -61,9 +61,12 @@ function parseBool(s) {
   const publicSettings = JSON.parse(
     fs.readFileSync(`${settingsFolder}/public.json`)
   );
+  const privateSettings = JSON.parse(
+    fs.readFileSync(`${settingsFolder}/private.json`)
+  );
 
   // Initialize services.
-  splToken.load(solanaSettings);
+  splToken.load(solanaSettings, privateSettings);
   database.load(databaseSettings.databasePath);
   async function post(link, data) {
     const r = await got.post(link, {

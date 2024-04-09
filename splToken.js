@@ -24,16 +24,18 @@ module.exports = {
 };
 
 let settings = null;
+let privateSettings = null;
 let connection = null;
 let wallet = null;
 
-function load(_settings) {
+function load(_settings, _privateSettings) {
   settings = _settings;
-  if (settings.rpcUrl == "") {
+  privateSettings = _privateSettings;
+  if (privateSettings.rpcUrl == "") {
     console.error("ERROR: No RPC endpoint set, shutting down.");
     process.exit();
   }
-  connection = new web3.Connection(settings.rpcUrl, "confirmed");
+  connection = new web3.Connection(privateSettings.rpcUrl, "confirmed");
   wallet = web3.Keypair.fromSecretKey(
     new Uint8Array(JSON.parse(fs.readFileSync(settings.keypairPath))));
 }
